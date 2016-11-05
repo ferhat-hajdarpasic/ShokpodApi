@@ -5,5 +5,9 @@
   "main": "server.js",
   "author": {
     "name": "MPMADMIN"
+  },
+  "dependencies": {
+    "mongoose": "^4.6.6",
+    "restify": "^4.2.0"
   }
 }
