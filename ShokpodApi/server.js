@@ -27,6 +27,17 @@ var CommentSchema = new Schema({
 });
 mongoose.model('Comment', CommentSchema);
 
+var RecordSchema = new Schema({
+    DeviceAddress: String,
+    AssignedName: String,
+    Time: Date,
+    Value: {
+        X: Number,
+        Y: Number,
+        Z: Number
+    }
+});
+mongoose.model('Record', RecordSchema);
 
 mongoose.connect('mongodb://localhost/test');
 
@@ -34,6 +45,7 @@ var controllers = {}
 
 controllers.article = require('./controllers/article.js')
 controllers.comment = require('./controllers/comment.js')
+controllers.record = require('./controllers/record.js')
 
 var server = restify.createServer();
 
@@ -54,6 +66,13 @@ server.post("/comments", controllers.comment.createComment)
 server.put("/comments/:id", controllers.comment.viewComment)
 server.del("/comments/:id", controllers.comment.deleteComment)
 server.get("/comments/:id", controllers.comment.viewComment)
+// Comment End
+
+// Comment Start
+server.post("/records", controllers.record.createRecord)
+server.put("/records/:id", controllers.record.viewRecord)
+server.del("/records/:id", controllers.record.deleteRecord)
+server.get("/records/:id", controllers.record.viewRecord)
 // Comment End
 
 var port = process.env.PORT || 3000;
