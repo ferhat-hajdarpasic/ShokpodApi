@@ -1,0 +1,9 @@
+{
+  "name": "mining-impact-sensor-api",
+  "version": "0.0.0",
+  "description": "MiningImpactSensorApi",
+  "main": "server.js",
+  "author": {
+    "name": "MPMADMIN"
+  }
+}
