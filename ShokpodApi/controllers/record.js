@@ -3,8 +3,8 @@
     ObjectId = mongoose.Types.ObjectId
 
 exports.createRecord = function (req, res, next) {
-    var commentRecord = new Record(req.body);
-    commentRecord.save(function (err, record) {
+    var incomingRecord = new Record(req.body);
+    Record.find({ "DeviceAddress": incomingRecord.DeviceAddress }, function (err, record) {
         if (err) {
             res.status(500);
             res.json({
@@ -12,16 +12,54 @@ exports.createRecord = function (req, res, next) {
                 data: "Error occured: " + err
             })
         } else {
-            res.json({
-                type: true,
-                data: record
-            })
+            if (record) {
+                if (record.length == 0) {
+                    incomingRecord.save(function (err, record) {
+                        if (err) {
+                            res.status(500);
+                            res.json({
+                                type: false,
+                                data: "Error occured: " + err
+                            })
+                        } else {
+                            res.json({
+                                type: true,
+                                data: record
+                            })
+                        }
+                    })
+                } else {
+                    var recordToUpdate = record[0];
+                    recordToUpdate.update( {
+                            $push: { Recording: { $each: incomingRecord.Recording } } 
+                    }, function (err, record) {
+                        if (err) {
+                            res.status(500);
+                            res.json({
+                                type: false,
+                                data: "Error occured: " + err
+                            })
+                        } else {
+                            res.json({
+                                type: true,
+                                data: recordToUpdate
+                            })
+                        }
+                    }
+                    );
+                }
+            } else {
+                res.json({
+                    type: false,
+                    data: "Record: " + req.params.id + " not found"
+                })
+            }
         }
     })
 }
 
 exports.viewRecord = function (req, res, next) {
-    Record.findById(new ObjectId(req.params.id), function (err, record) {
+    Record.find(new ObjectId(req.params.id), function (err, record) {
         if (err) {
             res.status(500);
             res.json({

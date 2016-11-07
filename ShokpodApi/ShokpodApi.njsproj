@@ -32,8 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="controllers\record.js" />
-    <Compile Include="controllers\article.js" />
-    <Compile Include="controllers\comment.js" />
     <Compile Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
