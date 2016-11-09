@@ -33,6 +33,8 @@ server.put("/records/:id", controllers.record.viewRecord)
 server.del("/records/:id", controllers.record.deleteRecord)
 server.get("/records/:id", controllers.record.viewRecord)
 
+server.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
+
 var port = process.env.PORT || 3000;
 server.listen(port, function (err) {
     if (err)

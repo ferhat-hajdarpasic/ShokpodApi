@@ -107,6 +107,49 @@ exports.updateRecord = function (req, res, next) {
     })
 }
 
+exports.lastNSeconds = function (req, res, next) {
+    Record.aggregate([{
+        $project: { DeviceAddress: 1, AssignedName: 1, lastSample: { $slice: ["$Recording", -1] } }
+        }], function (err, results) {
+        if (err) {
+            next(err);
+        } else {
+            var periodStarts = [];
+            results.forEach(function (item, index, theArray) {
+                var lastSampleTime = item.lastSample[0].Time;
+                var lastSampleMsec = lastSampleTime.getTime();
+                var periodStartMsec = lastSampleMsec - 1000 * req.params.seconds;
+                var periodStart = new Date(periodStartMsec);
+                periodStarts[item.DeviceAddress] = periodStart.toISOString();
+                console.log('DeviceAddress=' + item.DeviceAddress + ', period start = ' + periodStarts[item.DeviceAddress]);
+            });
+
+            var periodStartAsString = (new Date((new Date()).getTime() - 1000 * req.params.seconds)).toISOString();
+
+            var o = eval('[{ \
+            $project: { \
+                DeviceAddress: 1, AssignedName: 1, \
+                    h: { \
+                    $filter: { \
+                        input: "$Recording", \
+                            as: "item", \
+                                cond: { $gte: ["$$item.Time", new Date("' + periodStartAsString + '")] } \
+                    } \
+                } \
+            } \
+        }]');
+
+            Record.aggregate(o, function (err, results) {
+                if (err) {
+                    next(err);
+                } else {
+                    res.json(results);
+                }
+            })
+        }
+    });
+}
+
 exports.deleteRecord = function (req, res, next) {
     Record.findByIdAndRemove(new Object(req.params.id), function (err, record) {
         if (err) {
