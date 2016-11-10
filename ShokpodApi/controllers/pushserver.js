@@ -7,7 +7,6 @@ var interval = 60; //Seconds
 var remoteApiAddress = "http://shokpod.australiaeast.cloudapp.azure.com:8080/records";
 
 var pushToServer = function () {
-    console.log("Start sending data to remote address:" + remoteApiAddress);
     Record.aggregate(
         [{$project: { DeviceAddress: 1, AssignedName: 1, Recording: { $slice: ["$Recording", 0, 100] } }}],
         function (err, recordsToSend) {
@@ -28,10 +27,9 @@ var pushToServer = function () {
                     if (error) {
                         console.log(error);
                     } else {
-                        console.log(response.statusCode, body);
+                        console.log('HTTP: ' + response.statusCode + ', message:' + body + ', device:' + recordToSend.DeviceAddress + ', from: ' + recordToSend.Recording[0].Time.toISOString() + ' until: ' + recordToSend.Recording[recordToSend.Recording.length - 1].Time.toISOString());
                     }
                 });
-                console.log('Sent data for device =' + recordToSend.DeviceAddress);
             });
         }
     });
@@ -40,6 +38,8 @@ var pushToServer = function () {
 exports.setInterval = function (value) { interval = value; }
 exports.setRemoteApiAddress = function(address) {remoteApiAddress = address;}
 exports.start = function () {
+    console.log("Start sending data to remote address:" + remoteApiAddress);
+    console.log("Sending period:" + interval);
     setTimeout(pushToServer, interval * 1000);
 }
 
