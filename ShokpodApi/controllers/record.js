@@ -4,7 +4,7 @@
 
 exports.createRecord = function (req, res, next) {
     var incomingRecord = new Record(req.body);
-    Record.find({ "DeviceAddress": incomingRecord.DeviceAddress }, function (err, record) {
+    Record.find({ "DeviceAddress": incomingRecord.DeviceAddress }, { Recording: false}, function (err, record) {
         if (err) {
             res.status(500);
             res.json({
@@ -42,7 +42,7 @@ exports.createRecord = function (req, res, next) {
                         } else {
                             res.json({
                                 type: true,
-                                data: "Written " + incomingRecord.Recording.length + " records."
+                                data: "Updated id " + recordToUpdate._id + ", written " + incomingRecord.Recording.length + " records."
                             })
                         }
                     }
