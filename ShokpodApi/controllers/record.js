@@ -42,7 +42,7 @@ exports.createRecord = function (req, res, next) {
                         } else {
                             res.json({
                                 type: true,
-                                data: recordToUpdate
+                                data: "Written " + incomingRecord.Recording.length + " records."
                             })
                         }
                     }

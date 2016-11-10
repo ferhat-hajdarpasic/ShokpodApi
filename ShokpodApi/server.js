@@ -1,5 +1,4 @@
 ﻿var restify = require('restify')
-
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
@@ -23,6 +22,12 @@ mongoose.connect('mongodb://localhost/test');
 
 var controllers = {}
 controllers.record = require('./controllers/record.js')
+var pushserver = require("./controllers/pushserver.js");
+
+pushserver.setInterval(5);
+
+//pushserver.start();
+
 var server = restify.createServer();
 server
     .use(restify.fullResponse())

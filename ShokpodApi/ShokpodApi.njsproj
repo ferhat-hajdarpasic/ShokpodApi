@@ -31,6 +31,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="controllers\pushserver.js" />
     <Compile Include="controllers\record.js" />
     <Compile Include="server.js" />
     <Content Include="package.json" />
@@ -42,11 +43,13 @@
     <Folder Include="typings\globals\" />
     <Folder Include="typings\globals\mongoose\" />
     <Folder Include="typings\globals\node\" />
+    <Folder Include="typings\globals\request\" />
     <Folder Include="typings\globals\restify\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="typings\globals\mongoose\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\request\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\restify\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />
   </ItemGroup>
