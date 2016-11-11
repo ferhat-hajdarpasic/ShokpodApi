@@ -7,8 +7,9 @@ var interval = 60; //Seconds
 var remoteApiAddress = "http://shokpod.australiaeast.cloudapp.azure.com:8080/records";
 
 var pushToServer = function () {
+    var RECORD_COUNT = 1000;
     Record.aggregate(
-        [{$project: { DeviceAddress: 1, AssignedName: 1, Recording: { $slice: ["$Recording", 0, 100] } }}],
+        [{ $project: { DeviceAddress: 1, AssignedName: 1, Recording: { $slice: ["$Recording", 0, RECORD_COUNT] }, RecordingLength: { $size: "$Recording" } }}],
         function (err, recordsToSend) {
         if (err) {
             next(err);
@@ -23,11 +24,39 @@ var pushToServer = function () {
                     },
                     json: recordToSend
                 }, function (error, response, body) {
-                    setTimeout(pushToServer, interval * 1000);
+                    if (index == theArray.length - 1) {
+                        setTimeout(pushToServer, interval * 1000);
+                    }
                     if (error) {
                         console.log(error);
                     } else {
-                        console.log('HTTP: ' + response.statusCode + ', message:' + body + ', device:' + recordToSend.DeviceAddress + ', from: ' + recordToSend.Recording[0].Time.toISOString() + ' until: ' + recordToSend.Recording[recordToSend.Recording.length - 1].Time.toISOString());
+                        var logMessage = 'HTTP: ' + response.statusCode + ', message:' + body + ', device:' + recordToSend.DeviceAddress + ', from: ';
+                        if (recordToSend.Recording.length > 0) {
+                            //logMessage += recordToSend.Recording[0].Time.toISOString() + ' until: ' + recordToSend.Recording[recordToSend.Recording.length - 1].Time.toISOString();
+                        }
+                        console.log(logMessage);
+
+                        var recordsToKeep = recordToSend.RecordingLength - RECORD_COUNT;
+                        if (recordsToKeep < 0) {
+                            recordsToKeep = 0;
+                        }
+                        Record.update(
+                            { _id: recordToSend._id },
+                            {
+                                $push: {
+                                    Recording: {
+                                        $each: [],
+                                        $slice: -recordsToKeep
+                                    }
+                                }
+                            },
+                            function (error, record) {
+                            if (error) {
+                                next(err);
+                            } else {
+                                console.log("Removed it: " + recordToSend._id + ", records now: " + recordToSend.RecordingLength);
+                            }
+                        });
                     }
                 });
             });

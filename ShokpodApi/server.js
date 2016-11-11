@@ -27,7 +27,7 @@ var pushserver = require("./controllers/pushserver.js");
 pushserver.setInterval(5);
 pushserver.setRemoteApiAddress("http://shokpod.australiaeast.cloudapp.azure.com:8080/records");
 
-//pushserver.start();
+pushserver.start();
 
 var server = restify.createServer();
 server
@@ -41,7 +41,7 @@ server.get("/records/:id", controllers.record.viewRecord)
 
 server.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 server.listen(port, function (err) {
     if (err)
         console.error(err)
