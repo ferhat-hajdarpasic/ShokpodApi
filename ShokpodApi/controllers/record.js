@@ -114,18 +114,7 @@ exports.lastNSeconds = function (req, res, next) {
         if (err) {
             next(err);
         } else {
-            var periodStarts = [];
-            results.forEach(function (item, index, theArray) {
-                var lastSampleTime = item.lastSample[0].Time;
-                var lastSampleMsec = lastSampleTime.getTime();
-                var periodStartMsec = lastSampleMsec - 1000 * req.params.seconds;
-                var periodStart = new Date(periodStartMsec);
-                periodStarts[item.DeviceAddress] = periodStart.toISOString();
-                console.log('DeviceAddress=' + item.DeviceAddress + ', period start = ' + periodStarts[item.DeviceAddress]);
-            });
-
             var periodStartAsString = (new Date((new Date()).getTime() - 1000 * req.params.seconds)).toISOString();
-
             var o = eval('[{ \
             $project: { \
                 DeviceAddress: 1, AssignedName: 1, \
