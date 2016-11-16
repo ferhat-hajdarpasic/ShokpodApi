@@ -3,7 +3,7 @@
     ObjectId = mongoose.Types.ObjectId
 
 exports.createRecord = function (req, res, next) {
-    var incomingRecord = new Record(req.body);
+    var incomingRecord = req.body;
     Record.find({ "DeviceAddress": incomingRecord.DeviceAddress }, { Recording: false}, function (err, record) {
         if (err) {
             res.status(500);

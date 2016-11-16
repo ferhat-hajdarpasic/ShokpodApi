@@ -7,8 +7,9 @@
     "name": "MPMADMIN"
   },
   "dependencies": {
-    "mongoose": "^4.6.6",
-    "request": "^2.78.0",
-    "restify": "^4.2.0"
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.8",
+    "request": "^2.78.0"
   }
 }
