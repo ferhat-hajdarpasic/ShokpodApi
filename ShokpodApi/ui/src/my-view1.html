@@ -1,0 +1,120 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../bower_components/highcharts-chart/highcharts-chart.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-elements/iron-elements.html">
+<link rel="import" href="../bower_components/paper-elements/paper-elements.html">
+<link rel="import" href="../bower_components/gold-elements/gold-elements.html">
+<link rel="import" href="../bower_components/neon-elements/neon-elements.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../bower_components/paper-styles/color.html" />
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view1">
+    <template>
+       
+        <app-location route="{{route}}" query-params="{{queryParams}}"></app-location>
+
+        <div class="horizontal layout">
+            <div class="flex">
+                <highcharts-chart type="area" title="Hi" x-label="Time" data='{{series}}' chart-options='[[plotOptions]]' x-axis='[[xAxis]]'>
+                </highcharts-chart>
+                <iron-ajax auto url="/records/timeseries/{{queryParams.id}}" handle-as="json" on-response="responseHandler"></iron-ajax>
+            </div>
+            <div style="width:250px">
+                <iron-scroll-threshold id="scrollThreshold" lower-threshold="30" on-lower-threshold="loadMoreData">
+
+                    <iron-list items="[[seriesAsList]]" as="record" scroll-target="scrollThreshold" style="height:500px;">
+                        <template>
+                            <paper-card>
+                                <div class="card-actions" style="font-size:10px;height:20px;padding:0;margin:0">
+                                    <div class="horizontal justified" style="font-size:10px;height:20px;padding:0;margin:0">
+                                        <paper-icon-button icon="icons:event" style="font-size:10px;height:20px;padding:0;margin:0"></paper-icon-button>
+                                        <paper-button style="font-size:10px;height:20px;padding:0;margin:0">[[record.Amplitude]]G</paper-button>
+                                        <paper-button style="font-size:10px;height:20px;padding:0;margin:0">[[record.Time]]</paper-button>
+                                    </div>
+                                </div>
+                            </paper-card>
+                        </template>
+                    </iron-list>
+
+                </iron-scroll-threshold>
+            </div>
+        </div>            
+
+    </template>
+
+    <script>
+    Polymer({
+        is: 'my-view1',
+        properties: {
+            queryParams: Object,
+            series: Object,
+            seriesAsList: Object,
+            xAxis: {
+                type: Object,
+                value: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        month: '%e. %b',
+                        year: '%b'
+                    }
+                }
+            },
+            plotOptions: {
+                type: Object,
+                value: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        threshold: null
+                    }
+                }
+            }
+        },
+        ready: function () {
+        },
+        responseHandler: function (e, detail) {
+            var seconds = 0;
+            var _series = [];
+            var _records = [];
+            detail.xhr.response.forEach(function myFunction(record, index) {
+                seconds = seconds + 1000;
+                var amplitude = Math.sqrt(Math.pow(record.Value.X, 2) + Math.pow(record.Value.Y, 2) + Math.pow(record.Value.Z, 2));
+                var timestamp = (new Date(record.Time)).getTime() + seconds;
+                console.log("t:" + timestamp + ", a:" + amplitude.toFixed(2));
+                _series.push([timestamp, amplitude]);
+                _records.push({
+                    Time: record.Time,
+                    Amplitude: amplitude.toFixed(2)
+                });
+            });
+            this.series = _series;
+            this.seriesAsList = _records;
+        }
+    });
+    </script>
+</dom-module>

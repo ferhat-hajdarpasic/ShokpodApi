@@ -43,7 +43,7 @@ app.listen(process.env.PORT, function (err) {
     if (err)
         console.error(err);
     else
-        console.log('Static content is ready at : ' + port);
+        console.log('Application is ready at : ' + port);
 });
 
 app.post("/records", controllers.record.createRecord)
@@ -51,8 +51,9 @@ app.put("/records/:id", controllers.record.viewRecord)
 app.delete("/records/:id", controllers.record.deleteRecord)
 app.get("/records/:id", controllers.record.viewRecord)
 app.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
+app.get("/records/timeseries/:id", controllers.record.timeseries)
 
-app.use(express.static(__dirname + '/static'));
+app.use(express.static(__dirname + '/ui'));
 
 
 if (process.env.environment == 'production')
