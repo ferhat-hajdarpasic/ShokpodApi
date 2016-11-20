@@ -6,28 +6,56 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-elements/iron-elements.html">
 <link rel="import" href="../bower_components/paper-elements/paper-elements.html">
-<link rel="import" href="../bower_components/gold-elements/gold-elements.html">
-<link rel="import" href="../bower_components/neon-elements/neon-elements.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../bower_components/paper-styles/color.html" />
+<link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html" />
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html" />
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
+    <style is="custom-style">
+        paper-card.rate {
+            @apply(--layout-horizontal);
+        }
+
+        .donut-image {
+            width: 100px;
+            height: 170px;
+            background: url('/images/donuts.png');
+            background-size: cover;
+        }
+
+        .rate-content {
+            @apply(--layout-flex);
+            float: left;
+        }
+
+        .rate-header {
+            @apply(--paper-font-headline);
+        }
+
+        .rate-name {
+            color: var(--paper-grey-600);
+            margin: 10px 0;
+        }
+
+        paper-icon-button.rate-icon {
+            --iron-icon-fill-color: white;
+            --iron-icon-stroke-color: var(--paper-grey-600);
+        }
+    </style>
     <template>
-       
         <app-location route="{{route}}" query-params="{{queryParams}}"></app-location>
-
-        <div class="horizontal layout">
-            <div class="flex">
-                <highcharts-chart type="area" title="Hi" x-label="Time" data='{{series}}' chart-options='[[plotOptions]]' x-axis='[[xAxis]]'>
-                </highcharts-chart>
-                <iron-ajax auto url="/records/timeseries/{{queryParams.id}}" handle-as="json" on-response="responseHandler"></iron-ajax>
-            </div>
-            <div style="width:250px">
-                <iron-scroll-threshold id="scrollThreshold" lower-threshold="30" on-lower-threshold="loadMoreData">
-
+        <paper-drawer-panel right-drawer>
+            <paper-header-panel drawer style="border:1px solid green;">
+                <app-toolbar class="pink-toolbar">
+                    <div main-title>EVENT HISTORY:</div>
+                </app-toolbar>
+                <iron-scroll-threshold id="scrollThreshold" lower-threshold="30">
                     <iron-list items="[[seriesAsList]]" as="record" scroll-target="scrollThreshold" style="height:500px;">
                         <template>
                             <paper-card>
@@ -41,11 +69,29 @@
                             </paper-card>
                         </template>
                     </iron-list>
-
                 </iron-scroll-threshold>
-            </div>
-        </div>            
-
+            </paper-header-panel>
+            <paper-header-panel main style="border:1px solid green;">
+                <app-toolbar class="pink-toolbar">
+                    <div main-title>{{queryParams.name}}</div>
+                </app-toolbar>
+                <highcharts-chart type="area" title="Hi" x-label="Time" data='{{series}}' chart-options='[[plotOptions]]' x-axis='[[xAxis]]' x-zoom='true'>
+                </highcharts-chart>
+                <iron-ajax auto url="/records/timeseries/{{queryParams.id}}" handle-as="json" on-response="responseHandler"></iron-ajax>
+                <paper-card class="rate">
+                    <div class="rate-content">
+                        <div class="card-content">
+                            <div class="rate-header">MAXIMUM IMPACT:</div>
+                            <div><paper-checkbox>REGISTER</paper-checkbox></div>
+                        </div>
+                        <div class="card-actions">
+                            <div>TIME OF IMPACT:</div>
+                        </div>
+                    </div>
+                    <div class="donut-image">HABA</div>
+                </paper-card>
+            </paper-header-panel>
+        </paper-drawer-panel>
     </template>
 
     <script>
@@ -58,11 +104,7 @@
             xAxis: {
                 type: Object,
                 value: {
-                    type: 'datetime',
-                    dateTimeLabelFormats: { // don't display the dummy year
-                        month: '%e. %b',
-                        year: '%b'
-                    }
+                    type: 'datetime'
                 }
             },
             plotOptions: {
@@ -103,17 +145,18 @@
             var _records = [];
             detail.xhr.response.forEach(function myFunction(record, index) {
                 seconds = seconds + 1000;
-                var amplitude = Math.sqrt(Math.pow(record.Value.X, 2) + Math.pow(record.Value.Y, 2) + Math.pow(record.Value.Z, 2));
+                var amplitude = parseFloat(Math.sqrt(Math.pow(record.Value.X, 2) + Math.pow(record.Value.Y, 2) + Math.pow(record.Value.Z, 2)).toFixed(2));
                 var timestamp = (new Date(record.Time)).getTime() + seconds;
-                console.log("t:" + timestamp + ", a:" + amplitude.toFixed(2));
+                //console.log("t:" + timestamp + ", a:" + amplitude.toFixed(2));
                 _series.push([timestamp, amplitude]);
                 _records.push({
                     Time: record.Time,
-                    Amplitude: amplitude.toFixed(2)
+                    Amplitude: amplitude
                 });
             });
             this.series = _series;
             this.seriesAsList = _records;
+            console.log("Resonse handler completed: " + this.series.length + " records.");
         }
     });
     </script>

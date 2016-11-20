@@ -1,0 +1,30 @@
+{
+  "name": "polymer-starter-kit",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "private": true,
+  "dependencies": {
+    "app-layout": "PolymerElements/app-layout#^0.10.0",
+    "app-route": "PolymerElements/app-route#^0.9.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.0",
+    "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.0",
+    "iron-media-query": "PolymerElements/iron-media-query#^1.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^1.0.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.0",
+    "polymer": "Polymer/polymer#^1.6.0",
+    "google-chart": "GoogleWebComponents/google-chart#^1.1.1",
+    "paper-slider": "PolymerElements/paper-slider#^1.0.12",
+    "highcharts-chart": "^1.1.7",
+    "iron-list": "PolymerElements/iron-list#^1.3.14",
+    "paper-card": "PolymerElements/paper-card#^1.1.4",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.10",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.0.0"
+  }
+}
