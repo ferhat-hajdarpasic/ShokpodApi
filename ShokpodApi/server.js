@@ -51,7 +51,7 @@ if (config.push) {
 }
 
 
-app.listen(process.env.PORT, function (err) {
+app.listen(port, function (err) {
     if (err)
         console.error(err);
     else
