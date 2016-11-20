@@ -37,6 +37,16 @@ var app = express();
 
 app.use(bodyParser.json());
 
+app.use(function (req, res, next) {
+    var nodeSSPI = require('node-sspi');
+    var nodeSSPIObj = new nodeSSPI({
+        retrieveGroups: true
+    });
+    nodeSSPIObj.authenticate(req, res, function (err) {
+        res.finished || next();
+    });
+});
+
 var port = process.env.PORT || 8080;
 
 app.listen(process.env.PORT, function (err) {
@@ -54,7 +64,6 @@ app.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
 app.get("/records/timeseries/:id", controllers.record.timeseries)
 
 app.use(express.static(__dirname + '/ui'));
-
 
 if (process.env.environment == 'production')
     process.on('uncaughtException', function (err) {
