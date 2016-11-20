@@ -85,10 +85,10 @@
                             <div><paper-checkbox>REGISTER</paper-checkbox></div>
                         </div>
                         <div class="card-actions">
-                            <div>TIME OF IMPACT:</div>
+                            <div>TIME OF IMPACT: [[maximumImpactRecord.Time]]</div>
                         </div>
                     </div>
-                    <div class="donut-image">HABA</div>
+                    <div class="cyan">[[maximumImpactRecord.Amplitude]]G</div>
                 </paper-card>
             </paper-header-panel>
         </paper-drawer-panel>
@@ -135,7 +135,8 @@
                         threshold: null
                     }
                 }
-            }
+            },
+            maximumImpactRecord: Object
         },
         ready: function () {
         },
@@ -143,6 +144,8 @@
             var seconds = 0;
             var _series = [];
             var _records = [];
+            var _maximumImpactAmplitude = -1;
+            var _maximumImpactRecord;
             detail.xhr.response.forEach(function myFunction(record, index) {
                 seconds = seconds + 1000;
                 var amplitude = parseFloat(Math.sqrt(Math.pow(record.Value.X, 2) + Math.pow(record.Value.Y, 2) + Math.pow(record.Value.Z, 2)).toFixed(2));
@@ -153,9 +156,17 @@
                     Time: record.Time,
                     Amplitude: amplitude
                 });
+                if (amplitude > _maximumImpactAmplitude) {
+                    _maximumImpactRecord = {
+                        Time: record.Time,
+                        Amplitude: amplitude
+                    }
+                    _maximumImpactAmplitude = amplitude;
+                }
             });
             this.series = _series;
             this.seriesAsList = _records;
+            this.maximumImpactRecord = _maximumImpactRecord;
             console.log("Resonse handler completed: " + this.series.length + " records.");
         }
     });
