@@ -29,10 +29,6 @@ var pushserver = require("./controllers/pushserver.js");
 pushserver.setInterval(5);
 pushserver.setRemoteApiAddress("http://shokpod.australiaeast.cloudapp.azure.com:8080/records");
 
-if ((process.argv.length >= 2) && ('push' == process.argv[2])) {
-    //pushserver.start();
-}
-
 var app = express();
 
 app.use(bodyParser.json());
@@ -47,7 +43,13 @@ app.use(function (req, res, next) {
     });
 });
 
-var port = process.env.PORT || 8080;
+var config = require("./config.json");
+var port = config.port || 8080;
+
+if (config.push) {
+    pushserver.start();
+}
+
 
 app.listen(process.env.PORT, function (err) {
     if (err)
