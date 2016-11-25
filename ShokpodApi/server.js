@@ -26,32 +26,30 @@ var controllers = {}
 controllers.record = require('./controllers/record.js')
 var pushserver = require("./controllers/pushserver.js");
 
-pushserver.setInterval(5);
-pushserver.setRemoteApiAddress("http://shokpod.australiaeast.cloudapp.azure.com:8080/records");
-
 var app = express();
 
 app.use(bodyParser.json());
-
-/*
-app.use(function (req, res, next) {
-    var nodeSSPI = require('node-sspi');
-    var nodeSSPIObj = new nodeSSPI({
-        retrieveGroups: true
-    });
-    nodeSSPIObj.authenticate(req, res, function (err) {
-        res.finished || next();
-    });
-});
-*/
 
 var config = require("./config.json");
 var port = config.port || 8080;
 
 if (config.push) {
+    pushserver.setRemoteApiAddress(config.pushServer);
+    pushserver.setInterval(config.pushInterval);
     pushserver.start();
 }
 
+if (config.secure) {
+    app.use(function (req, res, next) {
+        var nodeSSPI = require('node-sspi');
+        var nodeSSPIObj = new nodeSSPI({
+            retrieveGroups: true
+        });
+        nodeSSPIObj.authenticate(req, res, function (err) {
+            res.finished || next();
+        });
+    });
+}
 
 app.listen(port, function (err) {
     if (err)

@@ -1,4 +1,7 @@
 ﻿{
   "port": 8081,
-  "push": false
+  "push": false,
+  "pushServer": "http://shokpod.australiaeast.cloudapp.azure.com:8080/records",
+  "pushInterval":  5,
+  "secure": false
 }
