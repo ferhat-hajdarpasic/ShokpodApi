@@ -1,4 +1,4 @@
 ﻿{
-  "port": 8080,
-  "push": true
+  "port": 8081,
+  "push": false
 }

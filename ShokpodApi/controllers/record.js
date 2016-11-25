@@ -31,8 +31,9 @@ exports.createRecord = function (req, res, next) {
                     })
                 } else {
                     var recordToUpdate = record[0];
-                    recordToUpdate.update( {
-                            $push: { Recording: { $each: incomingRecord.Recording } } 
+                    recordToUpdate.update({
+                        $push: { Recording: { $each: incomingRecord.Recording } },
+                        AssignedName: incomingRecord.AssignedName
                     }, function (err, record) {
                         if (err) {
                             res.status(500);

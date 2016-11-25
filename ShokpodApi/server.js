@@ -33,6 +33,7 @@ var app = express();
 
 app.use(bodyParser.json());
 
+/*
 app.use(function (req, res, next) {
     var nodeSSPI = require('node-sspi');
     var nodeSSPIObj = new nodeSSPI({
@@ -42,6 +43,7 @@ app.use(function (req, res, next) {
         res.finished || next();
     });
 });
+*/
 
 var config = require("./config.json");
 var port = config.port || 8080;
@@ -65,7 +67,7 @@ app.get("/records/:id", controllers.record.viewRecord)
 app.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
 app.get("/records/timeseries/:id", controllers.record.timeseries)
 
-app.use(express.static(__dirname + '/ui'));
+app.use(express.static(__dirname + '/ui/build/bundled'));
 
 if (process.env.environment == 'production')
     process.on('uncaughtException', function (err) {
