@@ -41,13 +41,24 @@ if (config.push) {
 
 if (config.secure) {
     app.use(function (req, res, next) {
+        var originalUrl = req.originalUrl;
         var nodeSSPI = require('node-sspi');
         var nodeSSPIObj = new nodeSSPI({
-            retrieveGroups: true
+            retrieveGroups: true,
+            authoritative: true
         });
-        nodeSSPIObj.authenticate(req, res, function (err) {
+        if (originalUrl.startsWith("/records")) {
             res.finished || next();
-        });
+        } else {
+            nodeSSPIObj.authenticate(req, res, function (err) {
+                var url2 = req.originalUrl;
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.finished || next();
+                }
+            });
+        }
     });
 }
 
@@ -65,7 +76,11 @@ app.get("/records/:id", controllers.record.viewRecord)
 app.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
 app.get("/records/timeseries/:id", controllers.record.timeseries)
 
-app.use(express.static(__dirname + '/ui/build/bundled'));
+var base_folder = '/ui/build/bundled';
+if (config.development) {
+    base_folder = '/ui';
+}
+app.use(express.static(__dirname + base_folder));
 
 if (process.env.environment == 'production')
     process.on('uncaughtException', function (err) {

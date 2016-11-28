@@ -1,7 +1,17 @@
 ﻿{
+  "development":  true,
   "port": 8081,
   "push": false,
   "pushServer": "http://shokpod.australiaeast.cloudapp.azure.com:8080/records",
   "pushInterval":  5,
-  "secure": false
+  "secure": true,
+  "supervisor": {
+    "colors": {
+      "green": 5,
+      "yellow": 10,
+      "orange": 50,
+      "red": 100,
+      "purple": 150
+    }
+  }
 }
