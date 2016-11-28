@@ -53,6 +53,20 @@
 
         font-weight: bold;
       }
+
+      .photoContent > .detail {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+          color: white;
+          font-size: 20px;
+          font-weight: 100;
+          padding: 20px;
+          opacity: 0;
+          transition: opacity 0.1s;
+        }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -67,6 +81,18 @@
       <app-drawer>
         <app-toolbar>Users online:</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+            <iron-list items="[[users]]" as="user" scroll-target="html">
+                <template>
+                    <div>
+                        <div class="photoContent" tabindex$="[[tabIndex]]">
+                            <div class="pad">
+                                <a name="view1" href="/view1?id=[[user._id]]&name=[[user.AssignedName]]">[[user.AssignedName]]</a>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </iron-list>
+            <!--
             <iron-list items="[[users]]" as="user" scroll-target="document" grid>
                 <template>
                     <div class="photoContainer">
@@ -76,6 +102,7 @@
                     </div>
                 </template>
             </iron-list>
+             -->
         </iron-selector>
       </app-drawer>
 

@@ -75,7 +75,7 @@
                 <app-toolbar class="pink-toolbar">
                     <div main-title>{{queryParams.name}}</div>
                 </app-toolbar>
-                <highcharts-chart type="area" title="Hi" x-label="Time" data='{{series}}' chart-options='[[plotOptions]]' x-axis='[[xAxis]]' x-zoom='true'>
+                <highcharts-chart type="area" title="[[queryParams.name]]" x-label="Time" data='{{series}}' chart-options='[[plotOptions]]' x-axis='[[xAxis]]' x-zoom='true'>
                 </highcharts-chart>
                 <iron-ajax auto url="/records/timeseries/{{queryParams.id}}" handle-as="json" on-response="responseHandler"></iron-ajax>
                 <paper-card class="rate">
