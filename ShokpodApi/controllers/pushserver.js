@@ -48,7 +48,8 @@ var pushToServer = function () {
                                         $each: [],
                                         $slice: -recordsToKeep
                                     }
-                                }
+                                },
+                                AssignedName: recordToSend.AssignedName
                             },
                             function (error, record) {
                             if (error) {
