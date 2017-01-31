@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="controllers\" />
+    <Folder Include="typings\globals\polymer\" />
     <Folder Include="ui\" />
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
@@ -57,6 +58,7 @@
     <TypeScriptCompile Include="typings\globals\express\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\mongoose\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\polymer\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\request\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\restify\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />
