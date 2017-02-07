@@ -78,7 +78,7 @@
             <paper-header-panel main style="border:1px solid green;">
                 <app-toolbar class="pink-toolbar">
                     <div main-title>{{queryParams.name}}</div>
-                    <paper-button raised>
+                    <paper-button raised on-tap="refresh">
                         <iron-icon icon="refresh"></iron-icon>
                         Refresh
                     </paper-button>
@@ -90,7 +90,7 @@
                 </app-toolbar>
                 <highcharts-chart type="area" title="[[queryParams.name]]" x-label="Time" data='{{series}}' chart-options='[[plotOptions]]' x-axis='[[xAxis]]' x-zoom='true'>
                 </highcharts-chart>
-                <iron-ajax auto url="/records/timeseries/{{queryParams.id}}" handle-as="json" on-response="responseHandler"></iron-ajax>
+                <iron-ajax id="timeseries" auto url="/records/timeseries/{{queryParams.id}}" handle-as="json" on-response="responseHandler"></iron-ajax>
                 <paper-card class="rate">
                     <div class="rate-content">
                         <div class="card-content">
@@ -181,6 +181,12 @@
             this.seriesAsList = _records;
             this.maximumImpactRecord = _maximumImpactRecord;
             console.log("Response handler completed: " + this.series.length + " records.");
+        },
+        refresh: function () {
+            console.log("call refresh");
+            this.async(function () {
+                this.$.timeseries.generateRequest();
+            }, 100);
         }
     });
     </script>
