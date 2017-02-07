@@ -54,19 +54,37 @@
         font-weight: bold;
       }
 
-      .photoContent > .detail {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
-          color: white;
-          font-size: 20px;
-          font-weight: 100;
-          padding: 20px;
-          opacity: 0;
-          transition: opacity 0.1s;
-        }
+         iron-list {
+      padding-bottom: 16px;
+    }
+    .item {
+      @apply(--layout-horizontal);
+      padding: 5px;
+      border-radius: 8px;
+      background-color: white;
+      border: 1px solid #ddd;
+      max-width: 800px;
+      margin: 2px auto 0 auto;
+    }
+    .item:focus {
+      outline: 0;
+      border-color: #333;
+    }
+    .pad {
+      padding: 0 5px;
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+    }
+    .primary {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .secondary {
+      font-size: 12px;
+    }
+    .dim {
+      color: gray;
+    }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -79,31 +97,21 @@
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
       <app-drawer>
-        <app-toolbar>Users online:</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+        <app-toolbar>Users:</app-toolbar>
             <iron-list items="[[users]]" as="user" scroll-target="html">
                 <template>
                     <div>
-                        <div class="photoContent" tabindex$="[[tabIndex]]">
+                        <div class="item">
                             <div class="pad">
-                                <a name="view1" href="/view1?id=[[user._id]]&name=[[user.AssignedName]]">[[user.AssignedName]]</a>
+                                <div class="primary">
+                                    <a name="view1" href="/view1?id=[[user._id]]&name=[[user.AssignedName]]">[[user.AssignedName]]</a>
+                                </div>
+                                <div class="secondary dim">[[user.DeviceAddress]]</div>
                             </div>
                         </div>
                     </div>
                 </template>
             </iron-list>
-            <!--
-            <iron-list items="[[users]]" as="user" scroll-target="document" grid>
-                <template>
-                    <div class="photoContainer">
-                        <div class="photoContent" tabindex$="[[tabIndex]]">
-                            <a name="view1" href="/view1?id=[[user._id]]&name=[[user.AssignedName]]">[[user.AssignedName]]</a>
-                        </div>
-                    </div>
-                </template>
-            </iron-list>
-             -->
-        </iron-selector>
       </app-drawer>
 
       <!-- Main content -->
