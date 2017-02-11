@@ -1,4 +1,5 @@
 ﻿var fn = require('fn.js');
+var json2csv = require('json2csv');
 var mongoose = require('mongoose'),
     Record = mongoose.model("Record"),
     ObjectId = mongoose.Types.ObjectId
@@ -96,6 +97,30 @@ exports.timeseries = function (req, res, next) {
             if (records && records.length > 0) {
                 record = records[0];
                 res.json(record.Recording)
+            } else {
+                res.json({
+                    type: false,
+                    data: "Record: " + req.params.id + " not found"
+                })
+            }
+        }
+    })
+}
+
+exports.csv = function (req, res, next) {
+    Record.find(new ObjectId(req.params.id), function (err, records) {
+        if (err) {
+            res.status(500);
+            res.json({
+                type: false,
+                data: "Error occured: " + err
+            })
+        } else {
+            if (records && records.length > 0) {
+                record = records[0];
+                var data = json2csv({ data: record.Recording, fields: ['Time', 'Value.X', 'Value.Y', 'Value.Z'], fieldNames: ['timestamp', 'Gx', 'Gy', 'Gz'], quotes: ''});
+                res.attachment(`${record.AssignedName}.csv`);
+                res.status(200).send(data);
             } else {
                 res.json({
                     type: false,

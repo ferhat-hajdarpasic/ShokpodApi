@@ -75,6 +75,7 @@ app.delete("/records/:id", controllers.record.deleteRecord)
 app.get("/records/:id", controllers.record.viewRecord)
 app.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
 app.get("/records/timeseries/:id", controllers.record.timeseries)
+app.get("/records/csv/:id", controllers.record.csv)
 
 var base_folder = '/ui/build/bundled';
 if (config.development) {
