@@ -82,7 +82,7 @@
                         <iron-icon icon="refresh"></iron-icon>
                         Refresh
                     </paper-button>
-                    <paper-button raised>
+                    <paper-button raised on-tap='downloadCsv'>
                         <iron-icon icon="file-download"></iron-icon>
                         Export
                     </paper-button>
@@ -151,6 +151,8 @@
             },
             maximumImpactRecord: Object
         },
+        listeners: {
+        },
         ready: function () {
         },
         responseHandler: function (e, detail) {
@@ -187,6 +189,11 @@
             this.async(function () {
                 this.$.timeseries.generateRequest();
             }, 100);
+        },
+        downloadCsv: function () {
+            var url = `/records/csv/${this.queryParams.id}`;
+            console.log('Download url=' + url);
+            document.location = url;
         }
     });
     </script>
