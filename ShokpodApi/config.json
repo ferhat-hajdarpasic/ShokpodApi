@@ -1,9 +1,9 @@
 ﻿{
-  "development":  false,
+  "development": true,
   "port": 8081,
   "push": false,
   "pushServer": "http://shokpod.australiaeast.cloudapp.azure.com:8080/records",
-  "pushInterval":  5,
+  "pushInterval": 5,
   "secure": true,
   "supervisor": {
     "colors": {
@@ -13,5 +13,12 @@
       "red": 100,
       "purple": 150
     }
+  },
+  "mssql": {
+    "server": "MCSHISTORIAN-C2",
+    "database": "tempdb",
+    "user": "mcsadmin",
+    "password": "moomin4ever",
+    "port": 1433
   }
 }

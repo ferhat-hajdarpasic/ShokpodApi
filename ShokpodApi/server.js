@@ -1,4 +1,5 @@
-﻿var mongoose = require("mongoose");
+﻿var config = require("./config.json");
+var mongoose = require("mongoose");
 var express = require('express');
 var bodyParser = require("body-parser");
 
@@ -24,13 +25,15 @@ mongoose.connect('mongodb://localhost/test');
 
 var controllers = {}
 controllers.record = require('./controllers/record.js')
+controllers.sqlserver = require('./controllers/sqlserver.js').connection(config.mssql);
 var pushserver = require("./controllers/pushserver.js");
 
+
+controllers.sqlserver.read();
 var app = express();
 
 app.use(bodyParser.json());
 
-var config = require("./config.json");
 var port = config.port || 8080;
 
 if (config.push) {
@@ -76,6 +79,11 @@ app.get("/records/:id", controllers.record.viewRecord)
 app.get("/records/:seconds/seconds", controllers.record.lastNSeconds)
 app.get("/records/timeseries/:id", controllers.record.timeseries)
 app.get("/records/csv/:id", controllers.record.csv)
+
+if (config.development) {
+    app.get("/sqlserver/read/:id", controllers.sqlserver.read);
+    app.get("/sqlserver/write", controllers.sqlserver.write);
+}
 
 var base_folder = '/ui/build/bundled';
 if (config.development) {
