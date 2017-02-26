@@ -117,8 +117,13 @@ exports.csv = function (req, res, next) {
             })
         } else {
             if (records && records.length > 0) {
-                record = records[0];
-                var data = json2csv({ data: record.Recording, fields: ['Time', 'Value.X', 'Value.Y', 'Value.Z'], fieldNames: ['timestamp', 'Gx', 'Gy', 'Gz'], quotes: ''});
+                var record = records[0];
+                //Add assigned name to each record.
+                record.Recording.forEach(function (item, index) {
+                    item.AssignedName = record.AssignedName;
+                });
+
+                var data = json2csv({ data: record.Recording, fields: ['AssignedName', 'Time', 'Value.X', 'Value.Y', 'Value.Z'], fieldNames: ['name', 'timestamp', 'AccX', 'AccY', 'AccZ'], quotes: ''});
                 res.attachment(`${record.AssignedName}.csv`);
                 res.status(200).send(data);
             } else {
