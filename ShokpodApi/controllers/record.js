@@ -58,7 +58,8 @@ exports.createRecord = function (req, res, next) {
                 })
             }
         }
-    })
+    });
+    next();
 }
 
 exports.viewRecord = function (req, res, next) {

@@ -15,6 +15,16 @@
     }
   },
   "mssql": {
+    "server": "ferhat-sql-server.database.windows.net",
+    "database": "mcshist",
+    "user": "ferhath",
+    "password": "",
+    "port": 1433,
+    "options": {
+      "encrypt": true
+    }
+  },
+  "mssql_newcrest": {
     "server": "MCSHISTORIAN-C2",
     "database": "tempdb",
     "user": "mcsadmin",
