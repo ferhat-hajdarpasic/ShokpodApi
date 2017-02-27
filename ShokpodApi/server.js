@@ -1,4 +1,13 @@
-﻿var config = require("./config.json");
+﻿var winston = require('winston');
+winston.add(winston.transports.File, { filename: 'shokpodapi.log' });
+console.error = winston.error;
+console.log = winston.info;
+console.info = winston.info;
+console.debug = winston.debug;
+console.warn = winston.warn;
+module.exports = console;
+
+var config = require("./config.json");
 var mongoose = require("mongoose");
 var express = require('express');
 var bodyParser = require("body-parser");
@@ -28,8 +37,6 @@ controllers.record = require('./controllers/record.js')
 controllers.sqlserver = require('./controllers/sqlserver.js').connection(config.mssql);
 var pushserver = require("./controllers/pushserver.js");
 
-
-controllers.sqlserver.read();
 var app = express();
 
 app.use(bodyParser.json());
@@ -72,7 +79,9 @@ app.listen(port, function (err) {
         console.log('Application is ready at : ' + port);
 });
 
-app.post("/records", controllers.record.createRecord)
+app.post("/records", controllers.record.createRecord);
+app.post("/records", controllers.sqlserver.write);
+
 app.put("/records/:id", controllers.record.viewRecord)
 app.delete("/records/:id", controllers.record.deleteRecord)
 app.get("/records/:id", controllers.record.viewRecord)
