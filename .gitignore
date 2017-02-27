@@ -241,3 +241,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /ShokpodApi/ui/.github/ISSUE_TEMPLATE.md
+/SQLQuery1.sql
