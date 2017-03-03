@@ -1,5 +1,5 @@
 ﻿{
-  "development": true,
+  "development": false,
   "port": 8081,
   "push": false,
   "pushServer": "http://shokpod.australiaeast.cloudapp.azure.com:8080/records",
@@ -14,7 +14,7 @@
       "purple": 150
     }
   },
-  "mssql": {
+  "mssql-azure": {
     "server": "ferhat-sql-server.database.windows.net",
     "database": "mcshist",
     "user": "ferhath",
@@ -26,9 +26,9 @@
   },
   "mssql_newcrest": {
     "server": "MCSHISTORIAN-C2",
-    "database": "tempdb",
+    "database": "mcshist",
     "user": "mcsadmin",
-    "password": "moomin4ever",
+    "password": "",
     "port": 1433
   }
 }
